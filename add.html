@@ -2,69 +2,68 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tambah Kenangan</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<style>
-body{
-font-family:Inter;
-background:linear-gradient(135deg,#bfdbfe,#fbcfe8,#e0e7ff);
-}
-</style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center p-6">
+<body class="bg-pink-100 min-h-screen flex items-center justify-center">
 
-<div class="bg-white/50 backdrop-blur-xl p-6 rounded-xl w-full max-w-md space-y-4 relative">
+<div class="bg-white p-6 rounded-xl w-96 space-y-4">
 
-<a href="index.html" class="text-blue-500">← Kembali</a>
-<h2 class="text-2xl font-bold text-center">Tambah Kenangan</h2>
+<h1 class="text-xl font-bold text-center">Tambah Kenangan</h1>
 
-<select id="event" class="w-full p-2 rounded">
+<select id="event" class="w-full p-2 border rounded">
+  <option value="0">Awal Kita</option>
+  <option value="1">Pertemuan</option>
 </select>
 
-<input id="date" type="date" class="w-full p-2 rounded">
+<input id="date" type="date" class="w-full p-2 border rounded">
+<textarea id="text" placeholder="Cerita..." class="w-full p-2 border rounded"></textarea>
 
-<textarea id="text" placeholder="Tulis ceritanya..." class="w-full p-2 rounded"></textarea>
-
-<input id="img" type="file" accept="image/*" class="w-full">
-
-<select id="memory-mood"
-  class="w-full p-2 rounded bg-black/40 border border-white/20">
-  <option value="❤️">❤️ Bahagia</option>
-  <option value="🥺">🥺 Kangen</option>
-  <option value="✨">✨ Spesial</option>
-  <option value="😂">😂 Ketawa</option>
-  <option value="😭">😭 Sedih</option>
+<select id="mood" class="w-full p-2 border rounded">
+  <option value="❤️">❤️</option>
+  <option value="🥺">🥺</option>
 </select>
 
-<button
+<input id="img" type="file" accept="image/*">
+
+<button type="button"
 onclick="addMemory()"
-class="relative z-10 bg-pink-400 hover:bg-pink-500 w-full py-2 rounded-lg font-bold text-white">
+class="bg-pink-500 text-white w-full py-2 rounded">
 Simpan
 </button>
 
 </div>
 
 <script>
-let timeline = JSON.parse(localStorage.getItem("timeline")) || [];
+/* ===== PASTIKAN DATA ADA ===== */
+let timeline = JSON.parse(localStorage.getItem("timeline"));
 
+if(!timeline){
+  timeline = [
+    {id:"awal", title:"Awal Kita", memories:[]},
+    {id:"meet", title:"Pertemuan", memories:[]}
+  ];
+  localStorage.setItem("timeline", JSON.stringify(timeline));
+}
+
+/* ===== TAMBAH MEMORY ===== */
 function addMemory(){
-  const eventIndex = document.getElementById("event").value;
+  const idx = document.getElementById("event").value;
   const date = document.getElementById("date").value;
   const text = document.getElementById("text").value;
   const mood = document.getElementById("mood").value;
   const file = document.getElementById("img").files[0];
 
   if(!date || !text){
-    alert("Tanggal dan cerita wajib 🤍");
+    alert("Tanggal & cerita wajib");
     return;
   }
 
   const save = (image)=>{
-    timeline[eventIndex].memories.push({date,text,mood,image});
+    timeline[idx].memories.push({date,text,mood,image});
     localStorage.setItem("timeline", JSON.stringify(timeline));
-    window.location.href="memory.html";
+    alert("TERSIMPAN ✅");
   };
 
   if(file){
