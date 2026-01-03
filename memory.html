@@ -22,61 +22,39 @@ background:linear-gradient(135deg,#bfdbfe,#fbcfe8,#e0e7ff);
 <div id="wall" class="max-w-6xl mx-auto space-y-12"></div>
 
 <script>
-let timeline=JSON.parse(localStorage.getItem("timeline"))||[];
-const wall=document.getElementById("wall");
+const timeline = JSON.parse(localStorage.getItem("timeline")) || [];
+const wall = document.getElementById("wall");
 
-function render(){
-wall.innerHTML="";
-timeline.forEach((event,ei)=>{
-const section=document.createElement("div");
-section.className="space-y-4";
+timeline.forEach(event=>{
+  const section = document.createElement("div");
+  section.innerHTML = `<h2 class="text-2xl font-bold mb-4">${event.title}</h2>`;
 
-section.innerHTML=`
-<h2 class="hand text-3xl text-blue-500">✨ ${event.title}</h2>
-<p class="text-sm text-gray-600">${event.date}</p>
-`;
+  if(event.memories.length === 0){
+    section.innerHTML += `<p class="text-gray-400">Belum ada kenangan 🤍</p>`;
+  }
 
-if(event.memories.length===0){
-section.innerHTML+=`
-<div class="bg-white/40 p-4 rounded-xl italic">
-Kenangan akan kita isi pelan-pelan 🤍
-</div>`;
-}else{
-const grid=document.createElement("div");
-grid.className="grid grid-cols-1 md:grid-cols-2 gap-4";
+  event.memories.forEach((m,i)=>{
+    section.innerHTML += `
+      <div class="bg-white/50 p-4 rounded mb-3">
+        ${m.image ? `<img src="${m.image}" class="rounded mb-2">` : ""}
+        <div class="text-sm">${m.date}</div>
+        <div>${m.text}</div>
+        <button onclick="deleteMemory('${event.id}',${i})"
+          class="text-red-400">🗑️</button>
+      </div>
+    `;
+  });
 
-event.memories.forEach((m,mi)=>{
-const card=document.createElement("div");
-card.className="bg-white/40 p-4 rounded-xl space-y-2";
-
-card.innerHTML=`
-<div class="flex justify-between text-sm">
-<span>${m.date}</span>
-<button onclick="del(${ei},${mi})">🗑️</button>
-</div>
-${m.image?`<img src="${m.image}" class="rounded-lg w-full max-h-60 object-cover">`:""}
-<p>${m.text}</p>
-<div class="text-xl">${m.mood}</div>
-`;
-
-grid.appendChild(card);
+  wall.appendChild(section);
 });
 
-section.appendChild(grid);
+function deleteMemory(eventId,index){
+  if(!confirm("Hapus kenangan ini?")) return;
+  const e = timeline.find(x=>x.id===eventId);
+  e.memories.splice(index,1);
+  localStorage.setItem("timeline",JSON.stringify(timeline));
+  location.reload();
 }
-
-wall.appendChild(section);
-});
-}
-
-function del(ei,mi){
-if(!confirm("Hapus kenangan ini? 🥺"))return;
-timeline[ei].memories.splice(mi,1);
-localStorage.setItem("timeline",JSON.stringify(timeline));
-render();
-}
-
-render();
 </script>
 
 </body>
