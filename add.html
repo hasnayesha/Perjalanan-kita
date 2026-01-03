@@ -14,15 +14,21 @@
 
 <select id="event" class="w-full p-2 border rounded">
   <option value="0">Awal Kita</option>
-  <option value="1">Pertemuan</option>
+  <option value="1">Pertemuan Pertama</option>
+  <option value="2">Kajacob-Dejacob</option>
+  <option value="3">Dating</option>
+  <option value="4">LDR</option>
 </select>
 
 <input id="date" type="date" class="w-full p-2 border rounded">
 <textarea id="text" placeholder="Cerita..." class="w-full p-2 border rounded"></textarea>
 
 <select id="mood" class="w-full p-2 border rounded">
-  <option value="❤️">❤️</option>
-  <option value="🥺">🥺</option>
+ <option value="❤️">❤️ Bahagia</option>
+  <option value="🥺">🥺 Kangen</option>
+  <option value="✨">✨ Spesial</option>
+  <option value="😂">😂 Ketawa</option>
+  <option value="😭">😭 Sedih</option>
 </select>
 
 <input id="img" type="file" accept="image/*">
@@ -42,7 +48,10 @@ let timeline = JSON.parse(localStorage.getItem("timeline"));
 if(!timeline){
   timeline = [
     {id:"awal", title:"Awal Kita", memories:[]},
-    {id:"meet", title:"Pertemuan", memories:[]}
+    {id:"meet", title:"Pertemuan Pertama", memories:[]},
+    {id: "jacob", title:"Kajacob-Dejacob", memories:[]},
+    {id: "dating", title:"Dating", memories:[]},
+    {id: "ldr", title:"LDR", memories: []}
   ];
   localStorage.setItem("timeline", JSON.stringify(timeline));
 }
@@ -78,3 +87,4 @@ function addMemory(){
 
 </body>
 </html>
+
