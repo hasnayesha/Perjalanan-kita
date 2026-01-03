@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Cerita Kita ❤️</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;600&display=swap');
-    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg,#1e1b4b,#312e81,#4f46e5); }
-    .hand { font-family: 'Gochi Hand', cursive; }
-  </style>
+<meta charset="UTF-8">
+<title>Cerita Kita ❤️</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter&display=swap');
+body{
+  font-family:'Inter';
+  background:linear-gradient(135deg,#bfdbfe,#fbcfe8,#e0e7ff);
+}
+.hand{font-family:'Gochi Hand';}
+.star{fill:#f9a8d4;cursor:pointer;transition:.3s}
+.star:hover{fill:#93c5fd;r:10}
+.line{stroke:rgba(255,255,255,.6);stroke-width:2}
+</style>
 </head>
 
-<body class="text-white min-h-screen flex items-center justify-center p-4">
+<body class="text-white min-h-screen flex items-center justify-center p-6">
 
-<div class="max-w-4xl w-full bg-black/60 backdrop-blur-xl rounded-3xl p-8 space-y-8">
+<div class="max-w-4xl w-full bg-white/20 backdrop-blur-xl rounded-3xl p-8 space-y-8">
 
-  <div class="text-center space-y-3">
-    <h1 class="hand text-5xl text-pink-400">Cerita Kita</h1>
-    <p class="text-gray-300">Timeline kecil berisi kenangan besar 🤍</p>
-  </div>
+<div class="text-center">
+<h1 class="hand text-5xl text-pink-500">Cerita Kita</h1>
+<p class="text-gray-700">Seperti bintang, setiap momen saling terhubung ✨</p>
+</div>
 
-  <div class="flex justify-center gap-4">
-    <a href="memory.html" class="bg-pink-500 px-6 py-2 rounded-full hover:bg-pink-600">🖼️ Memory Wall</a>
-    <a href="add.html" class="bg-indigo-500 px-6 py-2 rounded-full hover:bg-indigo-600">➕ Tambah Kenangan</a>
-  </div>
+<div class="flex justify-center gap-4">
+<a href="memory.html" class="bg-pink-400 px-6 py-2 rounded-full">🖼️ Memory Wall</a>
+<a href="add.html" class="bg-blue-400 px-6 py-2 rounded-full">➕ Tambah Kenangan</a>
+</div>
 
-  <div>
-    <h2 class="hand text-3xl text-indigo-300 text-center mb-4">Waktu yang kita lalui</h2>
-    <div id="timeline" class="flex flex-wrap justify-center gap-4"></div>
-  </div>
+<svg id="constellation" width="100%" height="300"></svg>
 
 </div>
 
@@ -36,21 +39,31 @@
 const defaultData = [
   { id:"awal", title:"Awal", date:"2025-03-03", memories:[] },
   { id:"meet", title:"Pertemuan Pertama", date:"2025-09-15", memories:[] },
-  { id:"jacob", title: "Kajacob-Dejacob", date: "2025-09-26"}
+  { id:"jacob", title: "Kajacob-Dejacob", date: "2025-09-26"},
   { id:"dating", title:"Dating", date:"2025-10-21", memories:[] },
   { id:"ldr", title:"LDR", date:"2026-01-01", memories:[] }
 ];
 
-let timeline = JSON.parse(localStorage.getItem("timeline")) || defaultData;
-localStorage.setItem("timeline", JSON.stringify(timeline));
+let timeline=JSON.parse(localStorage.getItem("timeline"))||defaultData;
+localStorage.setItem("timeline",JSON.stringify(timeline));
 
-const el = document.getElementById("timeline");
-timeline.forEach(e=>{
-  el.innerHTML += `
-    <div class="bg-white/10 px-4 py-2 rounded-xl text-center">
-      <div class="font-bold">${e.title}</div>
-      <div class="text-xs text-gray-300">${e.date}</div>
-    </div>`;
+const svg=document.getElementById("constellation");
+const w=svg.clientWidth,h=300;
+
+timeline.forEach((e,i)=>{
+const x=(i+1)*(w/(timeline.length+1));
+const y=h/2+Math.sin(i)*60;
+
+if(i>0){
+const px=i*(w/(timeline.length+1));
+const py=h/2+Math.sin(i-1)*60;
+svg.innerHTML+=`<line x1="${px}" y1="${py}" x2="${x}" y2="${y}" class="line"/>`;
+}
+
+svg.innerHTML+=`
+<circle cx="${x}" cy="${y}" r="7" class="star">
+<title>${e.title}</title>
+</circle>`;
 });
 </script>
 

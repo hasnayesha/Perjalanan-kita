@@ -2,50 +2,78 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Memory Wall ❤️</title>
+<title>Memory Wall</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter&display=swap');
-body { font-family:'Inter'; background:linear-gradient(135deg,#1e1b4b,#312e81,#4f46e5); }
+body{
+font-family:'Inter';
+background:linear-gradient(135deg,#bfdbfe,#fbcfe8,#e0e7ff);
+}
 .hand{font-family:'Gochi Hand';}
 </style>
 </head>
 
-<body class="text-white min-h-screen p-6">
+<body class="min-h-screen p-6 text-gray-800">
 
-<a href="index.html" class="text-pink-400 hover:underline">← Kembali</a>
+<a href="index.html" class="text-pink-500">← Kembali</a>
+<h1 class="hand text-4xl text-center text-pink-500 mb-8">Memory Wall</h1>
 
-<h1 class="hand text-4xl text-center text-pink-400 mb-6">Memory Wall</h1>
-
-<div id="wall" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+<div id="wall" class="space-y-10"></div>
 
 <script>
-let timeline = JSON.parse(localStorage.getItem("timeline")) || [];
-const wall = document.getElementById("wall");
+let timeline=JSON.parse(localStorage.getItem("timeline"))||[];
+const wall=document.getElementById("wall");
 
-function render() {
-  wall.innerHTML="";
-  timeline.forEach((event,ei)=>{
-    event.memories.forEach((m,mi)=>{
-      wall.innerHTML += `
-      <div class="bg-white/10 p-4 rounded-xl space-y-2">
-        <div class="flex justify-between text-sm text-gray-300">
-          <span>${event.title} • ${m.date}</span>
-          <button onclick="del(${ei},${mi})">🗑️</button>
-        </div>
-        ${m.image?`<img src="${m.image}" class="rounded-lg">`:""}
-        <p>${m.text}</p>
-        <div class="text-xl">${m.mood}</div>
-      </div>`;
-    });
-  });
+function render(){
+wall.innerHTML="";
+timeline.forEach((event,ei)=>{
+const section=document.createElement("div");
+section.className="space-y-4";
+
+section.innerHTML=`
+<h2 class="hand text-3xl text-blue-500">✨ ${event.title}</h2>
+<p class="text-sm text-gray-600">${event.date}</p>
+`;
+
+if(event.memories.length===0){
+section.innerHTML+=`
+<div class="bg-white/40 p-4 rounded-xl italic">
+Kenangan akan kita isi pelan-pelan 🤍
+</div>`;
+}else{
+const grid=document.createElement("div");
+grid.className="grid grid-cols-1 md:grid-cols-2 gap-4";
+
+event.memories.forEach((m,mi)=>{
+const card=document.createElement("div");
+card.className="bg-white/40 p-4 rounded-xl space-y-2";
+
+card.innerHTML=`
+<div class="flex justify-between text-sm">
+<span>${m.date}</span>
+<button onclick="del(${ei},${mi})">🗑️</button>
+</div>
+${m.image?`<img src="${m.image}" class="rounded-lg w-full max-h-60 object-cover">`:""}
+<p>${m.text}</p>
+<div class="text-xl">${m.mood}</div>
+`;
+
+grid.appendChild(card);
+});
+
+section.appendChild(grid);
+}
+
+wall.appendChild(section);
+});
 }
 
 function del(ei,mi){
-  if(!confirm("Hapus kenangan ini? 🥺")) return;
-  timeline[ei].memories.splice(mi,1);
-  localStorage.setItem("timeline",JSON.stringify(timeline));
-  render();
+if(!confirm("Hapus kenangan ini? 🥺"))return;
+timeline[ei].memories.splice(mi,1);
+localStorage.setItem("timeline",JSON.stringify(timeline));
+render();
 }
 
 render();
