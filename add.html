@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tambah Kenangan</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -14,15 +15,20 @@ background:linear-gradient(135deg,#bfdbfe,#fbcfe8,#e0e7ff);
 
 <body class="min-h-screen flex items-center justify-center p-6">
 
-<div class="bg-white/40 backdrop-blur-xl p-6 rounded-xl w-full max-w-md space-y-4">
+<div class="bg-white/50 backdrop-blur-xl p-6 rounded-xl w-full max-w-md space-y-4 relative">
 
 <a href="index.html" class="text-blue-500">← Kembali</a>
 <h2 class="text-2xl font-bold text-center">Tambah Kenangan</h2>
 
-<select id="event" class="w-full p-2 rounded"></select>
+<select id="event" class="w-full p-2 rounded">
+</select>
+
 <input id="date" type="date" class="w-full p-2 rounded">
+
 <textarea id="text" placeholder="Tulis ceritanya..." class="w-full p-2 rounded"></textarea>
+
 <input id="img" type="file" accept="image/*" class="w-full">
+
 <select id="memory-mood"
   class="w-full p-2 rounded bg-black/40 border border-white/20">
   <option value="❤️">❤️ Bahagia</option>
@@ -32,39 +38,46 @@ background:linear-gradient(135deg,#bfdbfe,#fbcfe8,#e0e7ff);
   <option value="😭">😭 Sedih</option>
 </select>
 
-<button onclick="add()" class="bg-pink-400 w-full py-2 rounded-lg font-bold">
+<button
+onclick="addMemory()"
+class="relative z-10 bg-pink-400 hover:bg-pink-500 w-full py-2 rounded-lg font-bold text-white">
 Simpan
 </button>
 
 </div>
 
 <script>
-let timeline=JSON.parse(localStorage.getItem("timeline"))||[];
-const sel=document.getElementById("event");
+let timeline = JSON.parse(localStorage.getItem("timeline")) || [];
+const sel = document.getElementById("event");
 
 timeline.forEach((e,i)=>{
-sel.innerHTML+=`<option value="${i}">${e.title}</option>`;
+sel.innerHTML += `<option value="${i}">${e.title}</option>`;
 });
 
-function add(){
-const e=sel.value;
-const date=document.getElementById("date").value;
-const text=document.getElementById("text").value;
-const mood=document.getElementById("mood").value;
-const file=document.getElementById("img").files[0];
+function addMemory(){
+const e = sel.value;
+const date = document.getElementById("date").value;
+const text = document.getElementById("text").value;
+const mood = document.getElementById("mood").value;
+const file = document.getElementById("img").files[0];
 
-if(!date||!text)return alert("Lengkapi ya 🤍");
+if(!date || !text){
+alert("Tanggal dan cerita wajib diisi 🤍");
+return;
+}
 
 if(file){
-const r=new FileReader();
-r.onload=()=>save(r.result);
-r.readAsDataURL(file);
-}else save(null);
+const reader = new FileReader();
+reader.onload = () => save(reader.result);
+reader.readAsDataURL(file);
+}else{
+save(null);
+}
 
 function save(image){
 timeline[e].memories.push({date,text,mood,image});
 localStorage.setItem("timeline",JSON.stringify(timeline));
-location.href="memory.html";
+window.location.href="memory.html";
 }
 }
 </script>

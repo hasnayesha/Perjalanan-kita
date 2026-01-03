@@ -14,12 +14,12 @@ background:linear-gradient(135deg,#bfdbfe,#fbcfe8,#e0e7ff);
 </style>
 </head>
 
-<body class="min-h-screen p-6 text-gray-800">
+<body class="min-h-screen p-6 text-gray-800 overflow-visible">
 
 <a href="index.html" class="text-pink-500">← Kembali</a>
 <h1 class="hand text-4xl text-center text-pink-500 mb-8">Memory Wall</h1>
 
-<div id="wall" class="space-y-10"></div>
+<div id="wall" class="max-w-6xl mx-auto space-y-12"></div>
 
 <script>
 let timeline=JSON.parse(localStorage.getItem("timeline"))||[];
