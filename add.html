@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Tambah Kenangan</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+body{font-family:'Inter';background:linear-gradient(135deg,#1e1b4b,#312e81,#4f46e5);}
+</style>
+</head>
+
+<body class="text-white min-h-screen flex items-center justify-center p-4">
+
+<div class="bg-black/60 p-6 rounded-xl w-full max-w-md space-y-4">
+
+<a href="index.html" class="text-indigo-400 hover:underline">← Kembali</a>
+
+<h2 class="text-2xl font-bold text-center">Tambah Kenangan</h2>
+
+<select id="event" class="w-full p-2 rounded bg-black/40"></select>
+<input id="date" type="date" class="w-full p-2 rounded bg-black/40">
+<textarea id="text" placeholder="Cerita..." class="w-full p-2 rounded bg-black/40"></textarea>
+<input id="img" type="file" accept="image/*" class="w-full">
+<select id="memory-mood"
+  class="w-full p-2 rounded bg-black/40 border border-white/20">
+  <option value="❤️">❤️ Bahagia</option>
+  <option value="🥺">🥺 Kangen</option>
+  <option value="✨">✨ Spesial</option>
+  <option value="😂">😂 Ketawa</option>
+  <option value="😭">😭 Sedih</option>
+</select>
+
+<button onclick="add()" class="bg-pink-500 w-full py-2 rounded-lg font-bold">Simpan</button>
+
+</div>
+
+<script>
+let timeline = JSON.parse(localStorage.getItem("timeline")) || [];
+const sel = document.getElementById("event");
+
+timeline.forEach((e,i)=>{
+  sel.innerHTML+=`<option value="${i}">${e.title}</option>`;
+});
+
+function add(){
+  const e = sel.value;
+  const date = document.getElementById("date").value;
+  const text = document.getElementById("text").value;
+  const mood = document.getElementById("mood").value;
+  const file = img.files[0];
+  if(!date||!text) return alert("Lengkapi ya 🤍");
+
+  if(file){
+    const r=new FileReader();
+    r.onload=()=>save(r.result);
+    r.readAsDataURL(file);
+  } else save(null);
+
+  function save(image){
+    timeline[e].memories.push({date,text,mood,image});
+    localStorage.setItem("timeline",JSON.stringify(timeline));
+    location.href="memory.html";
+  }
+}
+</script>
+
+</body>
+</html>

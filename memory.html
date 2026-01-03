@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Memory Wall ❤️</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter&display=swap');
+body { font-family:'Inter'; background:linear-gradient(135deg,#1e1b4b,#312e81,#4f46e5); }
+.hand{font-family:'Gochi Hand';}
+</style>
+</head>
+
+<body class="text-white min-h-screen p-6">
+
+<a href="index.html" class="text-pink-400 hover:underline">← Kembali</a>
+
+<h1 class="hand text-4xl text-center text-pink-400 mb-6">Memory Wall</h1>
+
+<div id="wall" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+<script>
+let timeline = JSON.parse(localStorage.getItem("timeline")) || [];
+const wall = document.getElementById("wall");
+
+function render() {
+  wall.innerHTML="";
+  timeline.forEach((event,ei)=>{
+    event.memories.forEach((m,mi)=>{
+      wall.innerHTML += `
+      <div class="bg-white/10 p-4 rounded-xl space-y-2">
+        <div class="flex justify-between text-sm text-gray-300">
+          <span>${event.title} • ${m.date}</span>
+          <button onclick="del(${ei},${mi})">🗑️</button>
+        </div>
+        ${m.image?`<img src="${m.image}" class="rounded-lg">`:""}
+        <p>${m.text}</p>
+        <div class="text-xl">${m.mood}</div>
+      </div>`;
+    });
+  });
+}
+
+function del(ei,mi){
+  if(!confirm("Hapus kenangan ini? 🥺")) return;
+  timeline[ei].memories.splice(mi,1);
+  localStorage.setItem("timeline",JSON.stringify(timeline));
+  render();
+}
+
+render();
+</script>
+
+</body>
+</html>
